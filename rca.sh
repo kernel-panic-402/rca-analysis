@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "************************  RCA TOOL v2  ************************"
+echo "************************  RCA TOOL v1  ************************"
 
 echo "Server Information :"
 ip=$(curl -s icanhazip.com)
@@ -55,28 +55,6 @@ cpu_mem_usage()
         printf "************************  RCA TOOL v2  ************************\n\n" >> $cpu_mem
         printf "The hostname of this instance is ${HOSTNAME} and its IP address is ${ip}.\n\n" >> $cpu_mem
 
-	printf "The processes taking high CPU usage are as follows: \n\n" >> $cpu_mem
-
-	#CPU Usage block starts here
-
-	found=false
-
-	# Get the PID and CPU usage for each process and filter out the header line
-	while read pid cpu name; do
-	# Check if the CPU usage is above the threshold (10.0% in this example)
-   	if [ "$(echo "scale=2; $cpu > 10.0" | bc)" -eq 1 ]; then
-        echo "Process name: $name, PID: $pid, CPU usage: $cpu%" >> $cpu_mem
-        found=true
-   	fi
-	done < <(ps -eo pid,%cpu,comm --sort=-%cpu | awk '{print $1, $2, $3}' | sed 1d)
-
-	# If no processes were found, print a message indicating so
-	if [ "${found}" = false ]; then
-	    echo "No processes are taking more than 10% CPU usage.\n\n" >> $cpu_mem
-	fi
-
-	# CPU Block ends here
-
 	printf "The processes taking high memory usage are as follows: \n" >> $cpu_mem
 
 	# Memory block starts here
@@ -96,3 +74,4 @@ check_older_logs
 check_larger_files
 cpu_mem_usage
 echo "The script has finished executing. The required files can be found in the same directory where this bash file is present."
+
