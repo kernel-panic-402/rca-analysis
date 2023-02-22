@@ -62,6 +62,7 @@ check_home_folder()
 
 zip_results()
 {
+	dnf install zip -y -q
 	zip rca_result.zip home_files* large_files* large_logs* old_logs* 
 }
 
