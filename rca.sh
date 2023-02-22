@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "************************  RCA TOOL v1  ************************"
+echo "************************  RCA TOOL v2  ************************"
 
 echo "Server Information :"
 ip=$(curl -s icanhazip.com)
@@ -47,24 +47,17 @@ check_larger_files()
         find / -ignore_readdir_race -xdev -type f -size +100M -exec du -shx --time {} \;  |  sort -h >> $Large_Files
 }
 
-cpu_mem_usage()
+check_home_folder()
 {
-	cpu_mem=cpu_mem_$(date "+%Y.%m.%d")
-	touch $cpu_mem
+	home_files=home_files_$(date "+%Y.%m.%d")
+	touch $home_files
 	ip=$(curl -s icanhazip.com)
-        printf "************************  RCA TOOL v2  ************************\n\n" >> $cpu_mem
-        printf "The hostname of this instance is ${HOSTNAME} and its IP address is ${ip}.\n\n" >> $cpu_mem
+        printf "************************  RCA TOOL v2  ************************\n\n" >> $home_files
+        printf "The hostname of this instance is ${HOSTNAME} and its IP address is ${ip}.\n\n" >> $home_files
+	printf "The files taking high disk in /home/ are as follows: \n" >> $home_files
+	
+	find /home/ -ignore_readdir_race -xdev -type f -size +100M -exec du -shx --time {} \;  |  sort -h >> $home_files
 
-	printf "The processes taking high memory usage are as follows: \n" >> $cpu_mem
-
-	# Memory block starts here
-
-	processes=`ps aux --sort=-%mem | awk '{print $1, $2, $4, $11}'`
-	echo "$processes" | head -n 11 >> $cpu_mem
-
-	#memory block ends here
-
-# function blocks end here
 }
 
 # execution block 
@@ -72,6 +65,6 @@ cpu_mem_usage()
 check_larger_logs
 check_older_logs
 check_larger_files
-cpu_mem_usage
+check_home_folder
 echo "The script has finished executing. The required files can be found in the same directory where this bash file is present."
 
