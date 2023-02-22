@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "************************  RCA TOOL v1  ************************"
+echo "************************  RCA TOOL v2  ************************"
 
 echo "Server Information :"
 ip=$(curl -s icanhazip.com)
@@ -96,4 +96,3 @@ check_older_logs
 check_larger_files
 cpu_mem_usage
 echo "The script has finished executing. The required files can be found in the same directory where this bash file is present."
-
