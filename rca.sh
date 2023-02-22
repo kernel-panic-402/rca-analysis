@@ -60,11 +60,18 @@ check_home_folder()
 
 }
 
+zip_results()
+{
+	zip rca_result.zip home_files* large_files* large_logs* old_logs* 
+}
+
 # execution block 
 
 check_larger_logs
 check_older_logs
 check_larger_files
 check_home_folder
+sleep 10s
+zip_results
 echo "The script has finished executing. The required files can be found in the same directory where this bash file is present."
 
